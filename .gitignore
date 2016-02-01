@@ -1,0 +1,16 @@
+.gradle/*
+.idea/*
+test/build/*
+application/build/*
+build/*
+core/build/*
+test.iml
+application.iml
+core.iml
+XMNTA_Glip.iml
+gradlew
+gradlew.bat
+gradle/*
+*.iml
+*.ipa
+

@@ -1,0 +1,5 @@
+rootProject.name = 'XMNTA_Glip'
+include 'application'
+include 'test'
+include 'core'
+
