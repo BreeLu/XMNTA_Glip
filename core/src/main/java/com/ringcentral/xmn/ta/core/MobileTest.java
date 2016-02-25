@@ -3,10 +3,12 @@ package com.ringcentral.xmn.ta.core;
 import com.google.gson.Gson;
 import com.ringcentral.xmn.ta.application.model.MobileApp;
 import com.ringcentral.xmn.ta.core.data.DeviceInfo;
+import com.ringcentral.xmn.ta.core.driverLauncher.MobileDriver;
 import com.ringcentral.xmn.ta.core.utils.CommandLineUtils;
 import com.ringcentral.xmn.ta.core.utils.FileUtils;
 import com.ringcentral.xmn.ta.core.utils.ProcessCSVFile;
-import com.ringcentral.xmn.ta.core.driverLauncher.MobileDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -16,41 +18,51 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MobileTest {
+    private static final Logger LOG = LoggerFactory.getLogger("CORELog");
+
     private static MobileApp mobile;
+
+    private static MobileDriver driver;
 
     public static MobileApp getMobile() {
         return mobile;
     }
 
-    /***
+    /**
      * init
      * prepare app
      * prepare account
-     ***/
+     * *
+     */
     @BeforeMethod
     public void beforeMethod() {
-        System.out.println("************** MobileTest beforeMethod ");
+        LOG.info("MobileTest beforeMethod , setup a session");
         initConfig();
         prepareApp();
     }
 
-    /***
+    /**
      * do the logout
-     ***/
+     * *
+     */
     @AfterMethod(alwaysRun = true)
     public void afterMethod() {
         //todo : wrap driver and screen
+        LOG.info("afterMethod , quit ther driver");
+        driver.quitDriver();
+
     }
 
-    /****
+    /**
+     * *
      * config the device info according to the deviceId
      * set app path/
-     *****/
+     * ***
+     */
     private void initConfig() {
         List<String> deviceIdList = getDeviceIdInUse();
         List<DeviceInfo> initDevices = new ArrayList<>();
         String configFile;
-        System.out.println("device id = " + deviceIdList.get(0));
         if (deviceIdList.get(0).length() == 40) {
             configFile = System.getProperty("user.dir") + "/core/src/main/resources/iosDeviceList.csv";
         } else {
@@ -60,7 +72,7 @@ public class MobileTest {
         try {
             deviceInfos = new ProcessCSVFile(new File(configFile)).processDevicePoolFile();
         } catch (IOException e) {
-            System.out.println("Process device Pool exception , exception detail : " + e.getMessage());
+            LOG.info("Process device Pool exception , exception detail : " + e.getMessage());
         }
 
         for (String deviceId : deviceIdList) {
@@ -86,10 +98,12 @@ public class MobileTest {
         }
     }
 
-    /********
+    /**
+     * *****
      * 1. uninstall/install app
      * 2. remove tips if first Login
-     *********/
+     * *******
+     */
     private void prepareApp() {
 
     }
@@ -100,7 +114,7 @@ public class MobileTest {
         String commandLine;
 //        String platform = System.getProperty("platform");
         String platform = "ios";
-        System.out.println("[INFO]MobileTest 102 platform = " + platform);
+        LOG.info("Current test platform is " + platform);
         if ("ios".equalsIgnoreCase(platform)) {
             commandLine = "/usr/local/Cellar/libimobiledevice/1.2.0/bin/idevice_id -l";
         } else {
@@ -115,7 +129,7 @@ public class MobileTest {
     }
 
     private void launchDriver(DeviceInfo deviceInfo) {
-        System.out.println("[Launch driver] deviceInfo = " + new Gson().toJson(deviceInfo));
+        LOG.info("DeviceInfo = " + new Gson().toJson(deviceInfo));
         String driverName;
         //todo
 //        String driverName = "ios".equalsIgnoreCase(System.getProperty("platform")) ? "IOSDriver" : "AndroidDriver";
@@ -125,7 +139,7 @@ public class MobileTest {
             driverName = "AndroidDriver";
         }
 
-        MobileDriver driver = MobileDriver.getDriverByName(driverName);
+        driver = MobileDriver.getDriverByName(driverName);
         if (driver != null) {
             driver.setupDriver(deviceInfo);
         }

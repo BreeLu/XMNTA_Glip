@@ -2,6 +2,8 @@ package com.ringcentral.xmn.ta.core.utils;
 
 import com.trilead.ssh2.Connection;
 import com.trilead.ssh2.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommandLineUtils {
+    private static final Logger LOG = LoggerFactory.getLogger("CORELog");
 
     public static void SSHCommand(String hostName, String username, String password, String... commandList) {
         Connection connection = new Connection(hostName);
@@ -55,7 +58,7 @@ public class CommandLineUtils {
                 strList.add(line.replace("\tdevice", ""));
             }
         }
-        System.out.println(strList.size());
+        LOG.info("number of attached devices is "+ strList.size());
 
         return strList;
     }

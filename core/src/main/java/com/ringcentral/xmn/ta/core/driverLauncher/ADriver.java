@@ -38,6 +38,11 @@ public class ADriver extends MobileDriver {
             e.printStackTrace();
         }
     }
+
+    public void quitDriver() {
+        driver.quit();
+    }
+
     public String getDriverName() {
         return "AndroidDriver";
     }

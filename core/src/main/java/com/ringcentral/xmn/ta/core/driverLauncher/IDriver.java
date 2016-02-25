@@ -46,6 +46,10 @@ public class IDriver extends MobileDriver {
         }
     }
 
+    public void quitDriver() {
+        iosDriver.quit();
+    }
+
     public String getDriverName() {
         return "IOSDriver";
     }

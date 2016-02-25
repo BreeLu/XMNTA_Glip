@@ -17,9 +17,17 @@ public class LoginPage  implements ILoginPage {
         return driver.getElementById("phone");
     }
 
+    public void enterPhoneNum(String phoneNum) {
+        getPhoneNumberField().sendKeys(phoneNum);
+    }
+
     @Override
     public MobileElement getPasswordField() {
         return driver.getElementById("password");
+    }
+
+    public void enterPassword(String password) {
+        getPasswordField().sendKeys(password);
     }
 
     @Override

@@ -19,6 +19,8 @@ public abstract class MobileDriver {
 
     public abstract void setupDriver(DeviceInfo deviceInfo);
 
+    public abstract void quitDriver();
+
     abstract MobileDriver getByPlatform();
 
     public String getDriverName() {
